@@ -1,19 +1,58 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 
-function WeatherDetails() {
+function WeatherDetails(
+        {temp,
+        humidity,
+        pressure,
+        weatherType,
+        name,
+        speed,
+        country,
+        sunset,}
+) {
+  const [weatherState, setWeatherState] = useState("");
+  useEffect(() => {
+    if (weatherType){
+      switch (weatherType) {
+        case "Clouds":
+          setWeatherState("wi-day-cloudy");
+          break;
+        case "Haze":
+          setWeatherState("wi-fog");
+          break;
+        case "Clear":
+          setWeatherState("wi-day-sunny");
+          break;
+        case "Mist":
+          setWeatherState("wi-dust");
+          break;
+        case "Rain":
+          setWeatherState("wi-day-rain");
+          break;
+        default:
+          setWeatherState("wi-day-sunny");
+          break;
+      }
+    }
+  },[weatherType])
+
+  // conerting the seconds in to time
+  let sec = sunset;
+  let date = new Date(sec * 1000);
+  let timeStr = `${date.getHours()}:${date.getMinutes()}`;
   return (
     <>
       <article className="widget">
         <div className="weatherIcon">
-          <i className="wi wi-day-sunny"></i>
+          <i className={`wi ${weatherState}`}></i>
         </div>
         <div className="weatherInfo">
           <div className="temperature">
-            <span>25&deg;</span>
+            <span>{temp}&deg;</span>
           </div>
           <div className="description">
-            <div className="weatherCondition">sunny</div>
-            <div className="place">Delhi, IN</div>
+            <div className="weatherCondition">{weatherType}</div>
+            <div className="place">{name}, {country}</div>
           </div>
         </div>
         <div className="date">{new Date().toLocaleString()}</div>
@@ -25,7 +64,7 @@ function WeatherDetails() {
               </p>
               <p className="extra-info">
                 <p className="extra-info-leftside">
-                  6:30 PM <br />
+                  {timeStr} PM <br />
                   Sunset
                 </p>
               </p>
@@ -36,7 +75,7 @@ function WeatherDetails() {
               </p>
               <p className="extra-info">
                 <p className="extra-info-leftside">
-                  444 <br />
+                  {humidity}<br />
                   Humidity
                 </p>
               </p>
@@ -49,7 +88,7 @@ function WeatherDetails() {
               </p>
               <p className="extra-info">
                 <p className="extra-info-leftside">
-                  433 <br />
+                  {pressure} <br />
                   Pressure
                 </p>
               </p>
@@ -61,7 +100,7 @@ function WeatherDetails() {
               </p>
               <p className="extra-info">
                 <p className="extra-info-leftside">
-                  433 <br />
+                  {speed} <br />
                   Speed
                 </p>
               </p>
